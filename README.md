@@ -6,19 +6,13 @@ This is a version of original [Spark Pi Example](https://github.com/apache/spark
 
 ## Building
 
-You can build either regular JAR without any dependencies:
-
-    sbt clean package
-
-Or an "ÜberJAR" which includes all of the required dependencies:
-
-    sbt clean assembly
+    mvn clean package
 
 ## Running on Spark
 
 To run on YARN:
 
-    YARN_CONF_DIR=/etc/hadoop/conf spark-submit --master yarn-cluster --class com.avira.uberjar.Pi uberjar-spark-demo-assembly-1.0.jar 100
+    spark-submit --master yarn-client --class com.avira.uberjar.Pi uberjar-spark-demo-assembly-1.0.jar 100
 
 ## Useful links
  - [Submitting Applications in Spark](https://spark.apache.org/docs/latest/submitting-applications.html)
