@@ -9,6 +9,7 @@
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>1.7</java.version>
         <scala.base.version>2.10</scala.base.version>
         <scala.version>${scala.base.version}.4</scala.version>
         <cdh.version>-cdh5.3.0</cdh.version>
@@ -17,10 +18,17 @@
     <dependencies>
         <dependency>
             <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+            <version>${scala.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.scala-lang</groupId>
             <artifactId>scala-compiler</artifactId>
             <version>${scala.version}</version>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>com.twitter</groupId>
             <artifactId>algebird-core_${scala.base.version}</artifactId>
@@ -45,23 +53,42 @@
             <plugin>
                 <groupId>net.alchim31.maven</groupId>
                 <artifactId>scala-maven-plugin</artifactId>
+                <version>3.2.0</version>
+                
+                <configuration>
+                    <recompileMode>incremental</recompileMode>
+                    <useZincServer>true</useZincServer>
+                </configuration>
+
                 <executions>
                     <execution>
-                        <id>compile</id>
+                        <id>scala-compile-first</id>
+                        <phase>process-resources</phase>
                         <goals>
                             <goal>compile</goal>
                         </goals>
-                        <phase>compile</phase>
                     </execution>
                     <execution>
-                        <id>test-compile</id>
+                        <id>scala-test-compile-first</id>
+                        <phase>process-test-resources</phase>
                         <goals>
                             <goal>testCompile</goal>
                         </goals>
-                        <phase>test-compile</phase>
                     </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.2</version>
+
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+
+                <executions>
                     <execution>
-                        <phase>process-resources</phase>
+                        <phase>compile</phase>
                         <goals>
                             <goal>compile</goal>
                         </goals>
@@ -80,7 +107,7 @@
                         </goals>
                         <configuration>
                             <minimizeJar>true</minimizeJar>
-                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <createDependencyReducedPom>true</createDependencyReducedPom>
                             <relocations>
                                 <relocation>
                                     <pattern>org.apache.hadoop.hbase</pattern>
