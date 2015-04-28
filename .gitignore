@@ -143,4 +143,5 @@ project/plugins/project/
 .scala_dependencies
 .worksheet
 
-
+# ScalaStyle
+project/scalastyle-output.xml
